@@ -14,7 +14,7 @@ const RadioButton = ({menu, name, handleChange, handleDisable, checked}) => {
               disabled={handleDisable} 
               checked={checked}
             />
-            <label className="form-check-label" htmlFor={menu.value}>{menu.value}</label>
+            <label className="form-check-label" htmlFor={menu.value}>{menu.id} {menu.value}</label>
         </div>     
     </div>
   )
