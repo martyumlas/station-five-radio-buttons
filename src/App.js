@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import InputContainer from "./components/InputContainer";
+import RadioInput from "./components/RadioInput";
 
 
   const menus =  [
@@ -31,6 +33,7 @@ function App() {
   const [menuTwo, setMenuTwo] = useState([])
   const [menuThree, setMenuThree] = useState([])
   const [selectedMenu, setSelectedMenu] = useState('')
+  const [selectedMenu3, setSelectedMenu3] = useState('')
 
   useEffect(() => {
    const menu2Ids =  menus[1].map(menu => menu.id).concat(menus[2].map(menu => menu.id))
@@ -42,21 +45,23 @@ function App() {
   const handleChange = (e) => {
     const value = e.target.value
     setSelectedMenu(value)
-
+    setMenuThree([])
+    setSelectedMenu3('')
     switch(value) {
       case '101':
         setMenuTwo(['201', '202', '206', '302'])
-        setMenuThree([])
+       
         break;
       case '102':
         setMenuTwo(['201', '301'])
-        setMenuThree([])
+       
           break; 
       case '103':
         setMenuTwo(['202'])
-        setMenuThree([])
+       
+        break;
       default:
-        setMenuThree([])
+       
         break;               
     }
   }
@@ -76,59 +81,41 @@ function App() {
   }
 
 
+
   return (
     <div className="container">
-
         <div className="container">
           <form action="">
-            <div className="row justify-content-md-center">
-             
+            <InputContainer> 
+             {menus[0].map(menu => (
+                 <RadioInput key={menu.id} name='main-menu' menu={menu} handleChange={handleChange} />
+              ))}            
+            </InputContainer>
 
-              {menus[0].map(menu => (
-                 <div key={menu.id} className="col col-lg-2 mt-5">
-                    <div className="form-check ">
-                      <input className="form-check-input" name="menu" type="radio" id={menu.value} value={menu.id} onChange={handleChange} />
-                      <label className="form-check-label" htmlFor={menu.value}>{menu.value}</label>
-                    </div>     
-                </div>
+            <InputContainer> 
+              {menus[1].map(menu => (
+                <RadioInput 
+                  key={menu.id} menu={menu} 
+                  name='menu-two' 
+                  checked={selectedMenu === menu.id} 
+                  handleChange={handleChange2}
+                  handleDisable={menuTwo && menuTwo.includes(menu.id)}
+                />
+              ))}             
+            </InputContainer>
+
+            <InputContainer>
+              {menus[2].map(menu => (
+                <RadioInput 
+                  key={menu.id} 
+                  menu={menu} 
+                  name='menu-three' 
+                  handleChange={(e) => setSelectedMenu3(e.target.value)}
+                  checked={selectedMenu3 === menu.id }
+                  handleDisable={ menuTwo.concat(menuThree).includes(menu.id)}
+                />
               ))}
-              
-
-                       
-            </div>
-
-            <div className="row justify-content-md-center mt-5">
-             
-
-             {menus[1].map(menu => (
-                <div key={menu.id} className="col col-lg-2">
-                   <div className="form-check ">
-                     <input className="form-check-input" name="menu1" type="radio" id={menu.value} value={menu.id} onChange={handleChange2} disabled={ menuTwo && menuTwo.includes(menu.id) ? true : false} checked={selectedMenu === menu.id} />
-                     <label className="form-check-label" htmlFor={menu.value}>{menu.id} {menu.value}</label>
-                   </div>     
-               </div>
-             ))}
-             
-
-                      
-           </div>
-
-           
-           <div className="row justify-content-md-center mt-5">
-             
-
-             {menus[2].map(menu => (
-                <div key={menu.id} className="col col-lg-2">
-                   <div className="form-check ">
-                     <input className="form-check-input" name="menu3" type="radio" id={menu.value} value={menu.id} onChange={(e) => setSelectedMenu(e.target.value)} disabled={  menuTwo.concat(menuThree).includes(menu.id) ? true : false} checked={selectedMenu === menu.id} />
-                     <label className="form-check-label" htmlFor={menu.value}>{menu.id} {menu.value}</label>
-                   </div>     
-               </div>
-             ))}
-             
-
-                      
-           </div>
+            </InputContainer>
           </form>
         </div>
     </div>
